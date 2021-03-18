@@ -16,7 +16,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 package main
 
 import (
-	"github.com/prometheus/client_golang/prometheus"
 	"io/ioutil"
 	"log"
 	"os/exec"
@@ -24,6 +23,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type NodesMetrics struct {
@@ -82,25 +83,25 @@ func ParseNodesMetrics(input []byte) *NodesMetrics {
 			mix := regexp.MustCompile(`^mix`)
 			resv := regexp.MustCompile(`^res`)
 			switch {
-			case alloc.MatchString(state) == true:
+			case alloc.MatchString(state):
 				nm.alloc += count
-			case comp.MatchString(state) == true:
+			case comp.MatchString(state):
 				nm.comp += count
-			case down.MatchString(state) == true:
+			case down.MatchString(state):
 				nm.down += count
-			case drain.MatchString(state) == true:
+			case drain.MatchString(state):
 				nm.drain += count
-			case fail.MatchString(state) == true:
+			case fail.MatchString(state):
 				nm.fail += count
-			case err.MatchString(state) == true:
+			case err.MatchString(state):
 				nm.err += count
-			case idle.MatchString(state) == true:
+			case idle.MatchString(state):
 				nm.idle += count
-			case maint.MatchString(state) == true:
+			case maint.MatchString(state):
 				nm.maint += count
-			case mix.MatchString(state) == true:
+			case mix.MatchString(state):
 				nm.mix += count
-			case resv.MatchString(state) == true:
+			case resv.MatchString(state):
 				nm.resv += count
 			}
 		}

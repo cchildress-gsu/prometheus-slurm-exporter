@@ -28,6 +28,9 @@ func TestNodesMetrics(t *testing.T) {
 		t.Fatalf("Can not open test data: %v", err)
 	}
 	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		t.Fatalf("Error reading file: %v", err)
+	}
 	t.Logf("%+v", ParseNodesMetrics(data))
 }
 

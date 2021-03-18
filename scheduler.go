@@ -16,13 +16,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 package main
 
 import (
-	"github.com/prometheus/client_golang/prometheus"
 	"io/ioutil"
 	"log"
 	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 /*
@@ -86,13 +87,13 @@ func ParseSchedulerMetrics(input []byte) *SchedulerMetrics {
 			tbc := regexp.MustCompile(`^[\s]+Total backfilled jobs \(since last stats cycle start\)`)
 			tbh := regexp.MustCompile(`^[\s]+Total backfilled heterogeneous job components`)
 			switch {
-			case st.MatchString(state) == true:
+			case st.MatchString(state):
 				sm.threads, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
-			case qs.MatchString(state) == true:
+			case qs.MatchString(state):
 				sm.queue_size, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
-			case dbd.MatchString(state) == true:
+			case dbd.MatchString(state):
 				sm.dbd_queue_size, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
-			case lc.MatchString(state) == true:
+			case lc.MatchString(state):
 				if lc_count == 0 {
 					sm.last_cycle, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
 					lc_count = 1
@@ -100,7 +101,7 @@ func ParseSchedulerMetrics(input []byte) *SchedulerMetrics {
 				if lc_count == 1 {
 					sm.backfill_last_cycle, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
 				}
-			case mc.MatchString(state) == true:
+			case mc.MatchString(state):
 				if mc_count == 0 {
 					sm.mean_cycle, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
 					mc_count = 1
@@ -108,15 +109,15 @@ func ParseSchedulerMetrics(input []byte) *SchedulerMetrics {
 				if mc_count == 1 {
 					sm.backfill_mean_cycle, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
 				}
-			case cpm.MatchString(state) == true:
+			case cpm.MatchString(state):
 				sm.cycle_per_minute, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
-			case dpm.MatchString(state) == true:
+			case dpm.MatchString(state):
 				sm.backfill_depth_mean, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
-			case tbs.MatchString(state) == true:
+			case tbs.MatchString(state):
 				sm.total_backfilled_jobs_since_start, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
-			case tbc.MatchString(state) == true:
+			case tbc.MatchString(state):
 				sm.total_backfilled_jobs_since_cycle, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
-			case tbh.MatchString(state) == true:
+			case tbh.MatchString(state):
 				sm.total_backfilled_heterogeneous, _ = strconv.ParseFloat(strings.TrimSpace(strings.Split(line, ":")[1]), 64)
 			}
 		}
